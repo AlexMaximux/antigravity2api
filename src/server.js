@@ -278,9 +278,8 @@ const requestHandler = async (req, res) => {
     }
     logger.logError("请求处理失败", err, { requestId });
     res.writeHead(500, { ...CORS_HEADERS, "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: { message: "Internal Server Error" } }));
   }
-});
+};
 
 (async () => {
   await authManager.loadAccounts();
