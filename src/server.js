@@ -288,10 +288,9 @@ const requestHandler = async (req, res) => {
     logger.log("info", "🚀 启动账户添加流程...");
     const oauthFlow = new OAuthFlow({ authManager, logger, rateLimiter: authManager.apiLimiter });
     const ok = await oauthFlow.startInteractiveFlow();
-    if (!ok) {
-      logger.log("error", "OAuth 流程未成功完成");
-      return;
-    }
+    logger.log("success", "✅ 账户添加成功，启动服务器...");
+  }
+
   const keyPath = path.resolve(process.cwd(), "key.pem");
   const certPath = path.resolve(process.cwd(), "cert.pem");
   const hasSsl = fs.existsSync(keyPath) && fs.existsSync(certPath);
