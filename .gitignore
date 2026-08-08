@@ -1,0 +1,10 @@
+.env
+.claude
+.serena
+auths/
+log/
+node_modules/
+*.log
+.DS_Store
+.ace-tool/
+AgentLogs/

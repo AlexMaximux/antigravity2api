@@ -1,0 +1,9 @@
+**
+
+!.dockerignore
+!.env.example
+!Dockerfile
+!docker-compose.yml
+!package*.json
+!README*.md
+!src/**
