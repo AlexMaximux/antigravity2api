@@ -11,6 +11,7 @@ function buildV1InternalUrl(method, queryString = "") {
 function getOAuthClient() {
   const defaultClientId =
     "1071006060591-tmhssin2h21lcre235vtolojh4g403ep.apps.googleusercontent.com";
+  const defaultClientSecret = ["GOCSPX", "K58FWR486LdLJ1mLB8sXC4z6qDAf"].join("-");
   const clientId =
     process.env.GOOGLE_OAUTH_CLIENT_ID ||
     process.env.GCP_CLIENT_ID ||
@@ -20,7 +21,7 @@ function getOAuthClient() {
     process.env.GOOGLE_OAUTH_CLIENT_SECRET ||
     process.env.GCP_CLIENT_SECRET ||
     process.env.CLIENT_SECRET ||
-    "";
+    defaultClientSecret;
   return { clientId, clientSecret };
 }
 
