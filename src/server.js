@@ -1,7 +1,9 @@
 // Proxy must be initialized before any fetch
 require("./utils/proxy");
 
+const fs = require("fs");
 const http = require("http");
+const https = require("https");
 const path = require("path");
 
 const { getConfig } = require("./utils/config");
@@ -87,7 +89,7 @@ function generateRequestId() {
   return `REQ-${Date.now().toString(36)}-${(++requestCounter).toString(36).padStart(4, "0")}`.toUpperCase();
 }
 
-const server = http.createServer(async (req, res) => {
+const requestHandler = async (req, res) => {
   const requestId = generateRequestId();
   const startTime = Date.now();
   const clientIP = req.socket.remoteAddress || "unknown";
@@ -291,8 +293,13 @@ const server = http.createServer(async (req, res) => {
       logger.log("error", "OAuth 流程未成功完成");
       return;
     }
-    logger.log("success", "✅ 账户添加成功，启动服务器...");
-  }
+  const keyPath = path.resolve(process.cwd(), "key.pem");
+  const certPath = path.resolve(process.cwd(), "cert.pem");
+  const hasSsl = fs.existsSync(keyPath) && fs.existsSync(certPath);
+
+  const server = hasSsl
+    ? https.createServer({ key: fs.readFileSync(keyPath), cert: fs.readFileSync(certPath) }, requestHandler)
+    : http.createServer(requestHandler);
 
   server.on("error", (err) => {
     if (err.code === "EADDRINUSE") {
