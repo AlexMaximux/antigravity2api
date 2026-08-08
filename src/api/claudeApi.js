@@ -85,51 +85,30 @@ class ClaudeApi {
 
   async handleListModels() {
     try {
-      const remoteModelsMap = await this.upstream.fetchAvailableModels().catch(() => null);
       const now = Math.floor(Date.now() / 1000);
-      const models = [];
-
-      if (remoteModelsMap && typeof remoteModelsMap === "object") {
-        for (const id of Object.keys(remoteModelsMap)) {
-          if (id && id.toLowerCase().includes("claude")) {
-            models.push({ id, object: "model", created: now, owned_by: "anthropic" });
-          }
-        }
-      }
-
-      if (models.length === 0) {
-        const defaultModels = [
-          "claude-sonnet-4-5",
-          "claude-sonnet-4-5-thinking",
-          "claude-opus-4-5-thinking",
-          "claude-3-5-sonnet-20241022",
-          "claude-3-5-haiku-20241022",
-          "claude-3-opus-20240229"
-        ];
-        for (const id of defaultModels) {
-          models.push({ id, object: "model", created: now, owned_by: "anthropic" });
-        }
-      }
-
-      return {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-        body: { object: "list", data: models },
-      };
-    } catch (e) {
-      const now = Math.floor(Date.now() / 1000);
-      const defaultModels = [
-        "claude-sonnet-4-5",
-        "claude-sonnet-4-5-thinking",
-        "claude-opus-4-5-thinking",
+      const modelIds = [
+        "claude-sonnet-4-6",
+        "claude-sonnet-4-6-thinking",
+        "claude-3-7-sonnet-20250219",
         "claude-3-5-sonnet-20241022",
+        "claude-3-5-sonnet-20240620",
         "claude-3-5-haiku-20241022",
-        "claude-3-opus-20240229"
+        "claude-3-opus-20240229",
+        "claude-sonnet-4-5",
+        "gemini-3.6-flash-high",
+        "gemini-3-flash"
       ];
       return {
         status: 200,
         headers: { "Content-Type": "application/json" },
-        body: { object: "list", data: defaultModels.map((id) => ({ id, object: "model", created: now, owned_by: "anthropic" })) },
+        body: { object: "list", data: modelIds.map((id) => ({ id, object: "model", created: now, owned_by: "anthropic" })) },
+      };
+    } catch (e) {
+      const now = Math.floor(Date.now() / 1000);
+      return {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+        body: { object: "list", data: [{ id: "claude-sonnet-4-6", object: "model", created: now, owned_by: "anthropic" }] },
       };
     }
   }
